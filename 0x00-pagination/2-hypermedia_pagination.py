@@ -1,28 +1,28 @@
 #!/usr/bin/env python3
-''' Description: Implement a get_hyper method that takes the same arguments
-                 (and defaults) as get_page and returns a dictionary containing
-                 the following key-value pairs
-'''
-
+"""Defines the Server class"""
 import csv
-from math import ceil
-from typing import List
+import math
+from typing import Any, Dict, List, Tuple
 
-index_range = __import__('0-simple_helper_function').index_range
+
+def index_range(page: int, page_size: int) -> Tuple[int, int]:
+    """
+    Generates a tuple containing the start and end indexes
+    of a range based on the page number and page size
+    """
+    return ((page_size * page) - page_size, page_size * page)
 
 
 class Server:
-    """Server class to paginate a database of popular baby names.
-    """
+    """Server class to paginate a database of popular baby names."""
+
     DATA_FILE = "Popular_Baby_Names.csv"
 
     def __init__(self):
-        ''' Initialize instance. '''
         self.__dataset = None
 
     def dataset(self) -> List[List]:
-        """Cached dataset
-        """
+        """Cached dataset"""
         if self.__dataset is None:
             with open(self.DATA_FILE) as f:
                 reader = csv.reader(f)
@@ -32,37 +32,28 @@ class Server:
         return self.__dataset
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
-        ''' Return page of dataset. '''
+        """Gets the page specified"""
         assert isinstance(page, int) and isinstance(page_size, int)
         assert page > 0 and page_size > 0
 
-        indices = index_range(page, page_size)
-        start = indices[0]
-        end = indices[1]
+        range = index_range(page=page, page_size=page_size)
 
         try:
-            return self.dataset()[start:end]
+            return self.dataset()[range[0]: range[1]]
         except IndexError:
             return []
 
-    def get_hyper(self, page: int = 1, page_size: int = 10) -> dict:
-        ''' Return dict of pagination data.
-            Dict key/value pairs consist of the following:
-                page_size - length of dataset page
-                page - current page number
-                data - dataset page
-                next_page - number of next page if there is one
-                prev_page - number of previous page if there is one
-                total_pages - total number of pages '''
-        page_data = self.get_page(page, page_size)
-        total_data = len(self.dataset())
-        total_pages = ceil(total_data / page_size)
+    def get_hyper(self, page: int = 1, page_size: int = 10) -> Dict[str, Any]:
+        """Gets the page specified along with Hypermedia"""
+        dataset = self.dataset()
 
-        return {
-            'page_size': len(page_data),
-            'page': page,
-            'data': page_data,
-            'next_page': page + 1 if page < total_pages else None,
-            'prev_page': page - 1 if page != 1 else None,
-            'total_pages': total_pages
-        }
+        hyper = {}
+        page_data = self.get_page(page, page_size)
+        hyper["page_size"] = len(page_data)
+        hyper["page"] = page
+        hyper["data"] = page_data
+        hyper["next_page"] = page + 1 if page + 1 < len(dataset) else None
+        hyper["prev_page"] = page - 1 if page - 1 > 0 else None
+        hyper["total_pages"] = math.ceil(len(dataset) / page_size)
+
+        return hyper
