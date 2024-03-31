@@ -3,7 +3,7 @@
 Main file
 """
 
-index_range = __import__('0-simple_helper_function').index_range
+index_range = __import__("0-simple_helper_function").index_range
 
 res = index_range(1, 7)
 print(type(res))
