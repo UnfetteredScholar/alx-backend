@@ -49,15 +49,25 @@ class Server:
         count = 0
         next_index = None
 
-        for k, v in dataset.items():
-            if k >= index and count < page_size:
-                data.append(v)
+        for i in range(index, len(dataset)):
+            if i in dataset and count < page_size:
+                data.append(dataset[i])
                 count += 1
                 continue
 
             if count == page_size:
-                next_index = k
+                next_index = i
                 break
+
+        # for k, v in dataset.items():
+        #     if k >= index and count < page_size:
+        #         data.append(v)
+        #         count += 1
+        #         continue
+
+        #     if count == page_size:
+        #         next_index = k
+        #         break
 
         hyper = {}
         hyper["index"] = index
