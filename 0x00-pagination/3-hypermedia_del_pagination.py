@@ -76,9 +76,7 @@ class Server:
         # hyper["data"] = data
 
         # return hyper
-        assert (
-            index is not None and index >= 0 and index <= len(self.dataset())
-        )
+        assert 0 <= index < len(self.dataset())
 
         indexed_dataset = self.indexed_dataset()
         indexed_page = {}
