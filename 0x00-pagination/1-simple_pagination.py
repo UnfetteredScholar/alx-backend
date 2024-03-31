@@ -31,14 +31,14 @@ class Server:
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
         """Gets the page specified"""
-        assert type(page) is int and page > 0
-        assert type(page_size) is int and page_size > 0
+        assert isinstance(page, int) and isinstance(page_size, int)
+        assert page > 0 and page_size > 0
 
         dataset = self.dataset()
 
         range = index_range(page=page, page_size=page_size)
 
-        if range[0] > len(dataset) or range[1] > len(dataset):
+        try:
+            return dataset[range[0]: range[1]]
+        except IndexError:
             return []
-
-        return dataset[range[0]: range[1]]
