@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
 import csv
-from typing import List
+from typing import List, Tuple
 
-index_range = __import__("0-simple_helper_function").index_range
+
+def index_range(page: int, page_size: int) -> Tuple[int, int]:
+    """
+    Generates a tuple containing the start and end indexes
+    of a range based on the page number and page size
+    """
+    return ((page_size * page) - page_size, page_size * page)
 
 
 class Server:
@@ -32,7 +38,6 @@ class Server:
 
         range = index_range(page=page, page_size=page_size)
 
-        try:
-            return dataset[range[0]: range[1]]
-        except IndexError:
+        if range[0] > len(dataset):
             return []
+        return dataset[range[0]: range[1]]
