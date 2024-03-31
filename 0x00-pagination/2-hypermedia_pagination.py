@@ -45,27 +45,16 @@ class Server:
 
     def get_hyper(self, page: int = 1, page_size: int = 10) -> dict:
         """Gets the page specified along with Hypermedia"""
-        # dataset = self.dataset()
 
-        # hyper = {}
-        # page_data = self.get_page(page, page_size)
-        # hyper["page_size"] = len(page_data)
-        # hyper["page"] = page
-        # hyper["data"] = page_data
-        # hyper["next_page"] = page + 1 if page + 1 < len(dataset) else None
-        # hyper["prev_page"] = page - 1 if page - 1 > 0 else None
-        # hyper["total_pages"] = math.ceil(len(dataset) / page_size)
-
-        # return hyper
+        hyper = {}
         page_data = self.get_page(page, page_size)
-        total_data = len(self.dataset())
-        total_pages = math.ceil(total_data / page_size)
+        data_size = len(self.dataset())
+        total_pages = math.ceil(data_size / page_size)
+        hyper["page_size"] = len(page_data)
+        hyper["page"] = page
+        hyper["data"] = page_data
+        hyper["next_page"] = page + 1 if page < total_pages else None
+        hyper["prev_page"] = page - 1 if page - 1 > 0 else None
+        hyper["total_pages"] = total_pages
 
-        return {
-            'page_size': len(page_data),
-            'page': page,
-            'data': page_data,
-            'next_page': page + 1 if page < total_pages else None,
-            'prev_page': page - 1 if page != 1 else None,
-            'total_pages': total_pages
-        }
+        return hyper
