@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Defines the Server class"""
 import csv
-from typing import List, Tuple
+import math
+from typing import Any, Dict, List, Tuple
 
 
 def index_range(page: int, page_size: int) -> Tuple[int, int]:
@@ -42,3 +43,17 @@ class Server:
         if range[0] > len(dataset):
             return []
         return dataset[range[0]: range[1]]
+
+    def get_hyper(self, page: int = 1, page_size: int = 10) -> Dict[str, Any]:
+        """Gets the page specified along with Hypermedia"""
+        dataset = self.dataset()
+
+        hyper = {}
+        hyper["page_size"] = page_size
+        hyper["page"] = page
+        hyper["data"] = self.get_page(page, page_size)
+        hyper["next_page"] = page + 1 if page + 1 < len(dataset) else None
+        hyper["prev_page"] = page - 1 if page - 1 > 0 else None
+        hyper["total_pages"] = math.ceil(len(dataset) / page_size)
+
+        return hyper
