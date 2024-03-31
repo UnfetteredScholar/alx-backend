@@ -40,60 +40,29 @@ class Server:
         self, index: Union[int, None] = None, page_size: int = 10
     ) -> dict:
         """Gets indexed data from dataset regardless of deleted items"""
-        # dataset = self.indexed_dataset()
-        # assert (
-        #     index is not None and index >= 0 and index <= max(dataset.keys())
-        # )
+        dataset = self.indexed_dataset()
+        assert (
+            index is not None and index >= 0 and index <= max(dataset.keys())
+        )
 
-        # data = []
-        # count = 0
-        # next_index = None
-
-        # for i in range(index, len(dataset)):
-        #     if i in dataset and count < page_size:
-        #         data.append(dataset[i])
-        #         count += 1
-        #         continue
-
-        #     if count == page_size:
-        #         next_index = i
-        #         break
-
-        # # for k, v in dataset.items():
-        # #     if k >= index and count < page_size:
-        # #         data.append(v)
-        # #         count += 1
-        # #         continue
-
-        # #     if count == page_size:
-        # #         next_index = k
-        # #         break
-
-        # hyper = {}
-        # hyper["index"] = index
-        # hyper["next_index"] = next_index
-        # hyper["page_size"] = len(data)
-        # hyper["data"] = data
-
-        # return hyper
-        data = self.indexed_dataset()
-        assert index is not None and index >= 0 and index <= max(data.keys())
-        page_data = []
-        data_count = 0
+        data = []
+        count = 0
         next_index = None
-        start = index if index else 0
-        for i, item in data.items():
-            if i >= start and data_count < page_size:
-                page_data.append(item)
-                data_count += 1
+
+        for k, v in dataset.items():
+            if k >= index and count < page_size:
+                data.append(v)
+                count += 1
                 continue
-            if data_count == page_size:
-                next_index = i
+
+            if count == page_size:
+                next_index = k
                 break
-        page_info = {
-            'index': index,
-            'next_index': next_index,
-            'page_size': len(page_data),
-            'data': page_data,
-        }
-        return page_info
+
+        hyper = {}
+        hyper["index"] = index
+        hyper["next_index"] = next_index
+        hyper["page_size"] = len(data)
+        hyper["data"] = data
+
+        return hyper
