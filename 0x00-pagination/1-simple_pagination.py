@@ -1,14 +1,8 @@
 #!/usr/bin/env python3
 import csv
-from typing import List, Tuple
+from typing import List
 
-
-def index_range(page: int, page_size: int) -> Tuple[int, int]:
-    """
-    Generates a tuple containing the start and end indexes
-    of a range based on the page number and page size
-    """
-    return ((page_size * page) - page_size, page_size * page)
+index_range = __import__("0-simple_helper_function").index_range
 
 
 class Server:
