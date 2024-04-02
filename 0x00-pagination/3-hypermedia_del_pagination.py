@@ -37,7 +37,7 @@ class Server:
         return self.__indexed_dataset
 
     def get_hyper_index(
-        self, index: Union[int, None] = None, page_size: int = 10
+        self, index: int = None, page_size: int = 10
     ) -> dict:
         """Gets indexed data from dataset regardless of deleted items"""
         dataset = self.indexed_dataset()
