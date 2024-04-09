@@ -37,6 +37,7 @@ def get_user() -> Union[Dict, None]:
 
 @app.before_request
 def before_request() -> None:
+    """Gets the current user before a request"""
     user = get_user()
     if user:
         g.user = user
