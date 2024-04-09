@@ -6,7 +6,7 @@ app = Flask(__name__)
 app.url_map.strict_slashes = False
 
 
-@app.get("/", strict_slashes=False)
+@app.get("/")
 def index() -> str:
     """Gets the index page"""
 
