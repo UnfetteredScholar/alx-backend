@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Task 1: A Basic Flask app.
+"""Task 2: A Basic Flask app.
 """
 from flask import Flask, render_template, request
 from flask_babel import Babel
