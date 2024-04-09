@@ -4,6 +4,7 @@
 from flask import Flask, render_template, request, g
 from flask_babel import Babel
 from typing import Dict, Union
+import pytz
 
 
 class Config:
@@ -56,10 +57,37 @@ def get_locale() -> str:
     return request.accept_languages.best_match(app.config["LANGUAGES"])
 
 
+@babel.timezoneselector
+def get_timezone() -> str:
+    """Gets the best matching timezone for a web page"""
+    timezone = request.args.get("timezone", None)
+
+    if timezone:
+        try:
+            pytz.timezone(timezone)
+        except pytz.exceptions.UnknownTimeZoneError:
+            pass
+        else:
+            return timezone
+
+    if g.user:
+        timezone = g.user.get("timezone")
+
+    if timezone:
+        try:
+            pytz.timezone(timezone)
+        except pytz.exceptions.UnknownTimeZoneError:
+            pass
+        else:
+            return timezone
+
+    return app.config["BABEL_DEFAULT_TIMEZONE"]
+
+
 @app.route("/")
 def get_index() -> str:
     """Returns the index (home) page"""
-    return render_template("6-index.html")
+    return render_template("7-index.html")
 
 
 if __name__ == "__main__":
