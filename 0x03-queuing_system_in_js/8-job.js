@@ -15,4 +15,4 @@ function createPushNotificationsJobs(jobs, queue) {
   });
 }
 
-module.exports = createPushNotificationsJobs;
+export default createPushNotificationsJobs;
