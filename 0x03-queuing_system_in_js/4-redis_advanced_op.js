@@ -29,7 +29,7 @@ function main() {
   printHash('HolbertonSchools');
 }
 
-client.on('connect', async () => {
+client.on('connect', () => {
   console.log('Redis client connected to the server');
   main();
 });
